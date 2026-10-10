@@ -1,5 +1,11 @@
 # Lived-In project instructions
 
+## Attribution
+
+- AI tools will not receive author, co-author, or contributor attribution for this project.
+- Do not add AI credits, AI usage notices, generated-by comments referring to AI tools, or AI co-author trailers to source code, documentation, mod metadata, release notes, or Git commit messages.
+- Preserve required third-party copyright and license notices.
+
 ## Living documentation
 
 The user requests that documentation be maintained automatically as part of development work. The user asks that any technical explanation in the documentation is very simple to understand (for a 2nd year bachelor software developer student that is doing an internship and has never worked in this field).
