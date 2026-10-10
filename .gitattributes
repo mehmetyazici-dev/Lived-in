@@ -3,5 +3,6 @@
 *.bat text eol=crlf
 *.ps1 text eol=crlf
 *.jar binary
+*.nbt binary
 src/generated/**/.cache/* text eol=lf
 src/generated/**/*.json text eol=lf

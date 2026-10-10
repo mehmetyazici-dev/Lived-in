@@ -1,0 +1,11 @@
+{
+  "lute_note": {
+    "subtitle": "subtitles.livedin.lute_note",
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.harp",
+        "type": "event"
+      }
+    ]
+  }
+}

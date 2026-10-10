@@ -8,7 +8,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 description='''
 A foundation for a more inhabited Minecraft world: travelers, communities, and places to discover.
-Development starter only; NPCs and settlements are not implemented yet.
+Includes ambient travelers, a campfire gathering with a lute musician, and a shoreline fisher with their sitting cat, and a traveler riding a vanilla boat. Settlements are planned.
 '''
 
 [[dependencies.${mod_id}]]
