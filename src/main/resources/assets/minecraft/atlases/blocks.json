@@ -1,0 +1,7 @@
+{
+  "sources": [
+    {"type":"minecraft:single","resource":"minecraft:entity/player/wide/steve","sprite":"livedin:invitation/steve"},
+    {"type":"minecraft:single","resource":"minecraft:entity/player/wide/alex","sprite":"livedin:invitation/alex"},
+    {"type":"minecraft:single","resource":"minecraft:entity/player/wide/noor","sprite":"livedin:invitation/noor"}
+  ]
+}

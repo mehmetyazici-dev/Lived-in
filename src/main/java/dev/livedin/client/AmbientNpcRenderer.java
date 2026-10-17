@@ -43,5 +43,29 @@ public final class AmbientNpcRenderer extends HumanoidMobRenderer<AmbientNpc, Tr
         super.render(npc, yaw, partialTick, poses, buffer, light);
         FishingSceneRenderer.render(npc, getModel(), partialTick, poses, buffer, light,
                 entityRenderDispatcher.cameraOrientation());
+        if (npc.getViewerProgress() > 0 && !npc.isInvisible() && entityRenderDispatcher.distanceToSqr(npc) < 24 * 24) {
+            poses.pushPose(); poses.translate(0, npc.getBbHeight() + .7, 0);
+            poses.mulPose(entityRenderDispatcher.cameraOrientation()); poses.scale(.018F, -.018F, .018F);
+            var matrix = poses.last().pose();
+            var vertices = buffer.getBuffer(net.minecraft.client.renderer.RenderType.textBackground());
+            quad(vertices, matrix, -30, 0, 30, 5, 0xDD18211B, light);
+            quad(vertices, matrix, -29, 1, -29 + 58 * npc.getViewerProgress() / 20F, 4, 0xFF7ACD8C, light);
+            String count = npc.getViewerProgress() + "/20";
+            getFont().drawInBatch(count, -getFont().width(count) / 2F, -10, 0xFFE5EEDB, false, matrix, buffer,
+                    net.minecraft.client.gui.Font.DisplayMode.NORMAL, 0, light);
+            poses.popPose();
+        }
+    }
+    private static void quad(com.mojang.blaze3d.vertex.VertexConsumer v, org.joml.Matrix4f m,
+            float left, float top, float right, float bottom, int color, int light) {
+        float depth = color == 0xDD18211B ? 0 : .01F;
+        v.addVertex(m, left, top, depth).setColor(color).setLight(light);
+        v.addVertex(m, right, top, depth).setColor(color).setLight(light);
+        v.addVertex(m, right, bottom, depth).setColor(color).setLight(light);
+        v.addVertex(m, left, bottom, depth).setColor(color).setLight(light);
+        v.addVertex(m, left, top, depth).setColor(color).setLight(light);
+        v.addVertex(m, left, bottom, depth).setColor(color).setLight(light);
+        v.addVertex(m, right, bottom, depth).setColor(color).setLight(light);
+        v.addVertex(m, right, top, depth).setColor(color).setLight(light);
     }
 }

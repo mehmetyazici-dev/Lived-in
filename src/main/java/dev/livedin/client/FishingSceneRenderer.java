@@ -3,6 +3,7 @@ package dev.livedin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.livedin.entity.AmbientNpc;
+import dev.livedin.entity.activity.FishingCast;
 import dev.livedin.scene.FishingCycle;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -24,8 +25,8 @@ public final class FishingSceneRenderer {
 
     public static void render(AmbientNpc npc, TravelerModel model, float partial, PoseStack poses,
                               MultiBufferSource buffer, int light, Quaternionf camera) {
-        int serverTick = npc.getFishingTick();
-        var water = npc.getFishingWater();
+        int serverTick = FishingCast.cycleTick(npc);
+        var water = FishingCast.water(npc);
         if (!npc.isAlive() || npc.isRemoved() || water == null || !FishingCycle.hasBobber(serverTick)) return;
         float tick = serverTick + partial;
         // The same arm transform and rod endpoint used by TravelerItemLayer.
@@ -40,7 +41,7 @@ public final class FishingSceneRenderer {
         Vec3 bobber = tip.lerp(target, extension);
         if (serverTick < FishingCycle.WAIT_START || serverTick >= FishingCycle.RETRIEVE_START)
             bobber = bobber.add(0, Mth.sin(extension * Mth.PI) * 0.8, 0);
-        else bobber = bobber.add(0, Mth.sin(tick * 0.15F) * 0.025, 0);
+        else bobber = bobber.add(0, Mth.sin((npc.tickCount + partial) * 0.15F) * 0.025, 0);
 
         VertexConsumer line = buffer.getBuffer(RenderType.lineStrip());
         for (int i = 0; i <= 24; i++) {

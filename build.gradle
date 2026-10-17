@@ -35,11 +35,26 @@ neoForge {
             server()
             programArgument '--nogui'
         }
+        encounterSurvey {
+            server()
+            sourceSet = sourceSets.gameTest
+            gameDirectory = project.file(project.findProperty('surveyDirectory') ?: 'runs/encounter-survey')
+            programArgument '--nogui'
+            systemProperty 'livedin.encounterSurvey', 'true'
+            systemProperty 'livedin.surveyRadius', project.findProperty('surveyRadius') ?: '5'
+        }
         gameTestServer {
             type = 'gameTestServer'
             sourceSet = sourceSets.gameTest
             gameDirectory = project.file('runs/gametest')
             systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+        housingSurvey {
+            server()
+            sourceSet = sourceSets.gameTest
+            gameDirectory = project.file(project.findProperty('housingSurveyDirectory') ?: 'runs/housing-survey')
+            programArgument '--nogui'
+            systemProperty 'livedin.housingSurvey', 'true'
         }
         configureEach {
             logLevel = org.slf4j.event.Level.INFO

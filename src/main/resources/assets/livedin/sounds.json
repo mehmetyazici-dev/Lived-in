@@ -3,7 +3,7 @@
     "subtitle": "subtitles.livedin.lute_note",
     "sounds": [
       {
-        "name": "minecraft:block.note_block.harp",
+        "name": "minecraft:block.note_block.guitar",
         "type": "event"
       }
     ]

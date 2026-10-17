@@ -22,13 +22,13 @@ public final class ReturnToActivitySpotGoal extends Goal {
     @Override
     public boolean canUse() {
         BlockPos spot = npc.getActivitySpot();
-        if (spot == null || npc.isPassenger() || npc.isWithinActivityArea(npc.blockPosition())
+        if (!npc.allowsDayActivity() || spot == null || npc.isPassenger() || npc.isWithinActivityArea(npc.blockPosition())
                 || npc.level().getGameTime() < nextAttempt || !npc.level().hasChunkAt(spot)) {
             return false;
         }
         nextAttempt = npc.level().getGameTime() + 40;
         path = npc.getNavigation().createPath(spot, 0);
-        return path != null && npc.isSafeCampPath(path);
+        return path != null && npc.isSafeActivityPath(path);
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class ReturnToActivitySpotGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !npc.isPassenger() && !npc.isWithinActivityArea(npc.blockPosition())
+        return npc.allowsDayActivity() && !npc.isPassenger() && !npc.isWithinActivityArea(npc.blockPosition())
                 && !npc.getNavigation().isDone();
     }
 

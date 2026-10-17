@@ -19,7 +19,7 @@ public final class SceneStrollGoal extends RandomStrollGoal {
 
     @Override
     public boolean canUse() {
-        if (npc.getRole() == dev.livedin.entity.NpcRole.MUSICIAN || npc.getRole() == dev.livedin.entity.NpcRole.FISHER
+        if (!npc.allowsDayActivity() || !npc.getActivity().allowsStrolling()
                 || npc.isPassenger() || !npc.isWithinActivityArea(npc.blockPosition()) || !super.canUse()) {
             return false;
         }
@@ -51,6 +51,6 @@ public final class SceneStrollGoal extends RandomStrollGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return !npc.isPassenger() && npc.isWithinActivityArea(npc.blockPosition()) && super.canContinueToUse();
+        return npc.allowsDayActivity() && !npc.isPassenger() && npc.isWithinActivityArea(npc.blockPosition()) && super.canContinueToUse();
     }
 }

@@ -1,6 +1,7 @@
 package dev.livedin.client.sound;
 
 import dev.livedin.entity.AmbientNpc;
+import dev.livedin.entity.activity.CampActivity;
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
 import dev.livedin.scene.CampfireMelody;
@@ -15,6 +16,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 public final class TravelerMusic {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final boolean DIAGNOSTICS = Boolean.getBoolean("livedin.musicDiagnostics");
+    private static final boolean NOTE_DIAGNOSTICS = Boolean.getBoolean("livedin.noteDiagnostics");
     private static final Map<UUID, Voice> VOICES = new HashMap<>();
     private static ClientLevel lastLevel;
 
@@ -30,7 +32,7 @@ public final class TravelerMusic {
         if (game.level == null || game.player == null || game.isPaused()) return;
         var heard = new HashSet<UUID>();
         for (var entity : game.level.entitiesForRendering()) {
-            if (!(entity instanceof AmbientNpc npc) || !npc.isAlive() || !npc.isPerforming() || npc.isSilent()
+            if (!(entity instanceof AmbientNpc npc) || !npc.isAlive() || !CampActivity.isPerforming(npc) || npc.isSilent()
                     || npc.distanceToSqr(game.player) > 24 * 24) continue;
             UUID id = npc.getUUID();
             heard.add(id);
@@ -56,7 +58,7 @@ public final class TravelerMusic {
 
     private static final class Voice {
         private final AmbientNpc npc;
-        private long lastSlot = Long.MIN_VALUE;
+        private long lastOnset = Long.MIN_VALUE;
         private LuteNoteSound sound;
         private boolean playbackConfirmed;
 
@@ -68,14 +70,16 @@ public final class TravelerMusic {
                 LOGGER.info("Lived-In music: sound engine playback active for {}", npc.getUUID());
             }
             long time = game.level.getGameTime();
-            long slot = time / CampfireMelody.TICKS_PER_NOTE;
-            if (slot == lastSlot) return;
-            lastSlot = slot;
+            var playback = CampfireMelody.playbackAt(time);
+            if (playback.startTick() == lastOnset) return;
+            lastOnset = playback.startTick();
             stop(game);
-            int note = CampfireMelody.noteAt(time);
+            int note = playback.midiNote();
             if (note >= 0) {
-                sound = new LuteNoteSound(npc, note);
+                sound = new LuteNoteSound(npc, note, playback.endTick());
                 game.getSoundManager().play(sound);
+                if (NOTE_DIAGNOSTICS) LOGGER.info("Lived-In score: musician {}; index {}; MIDI {}; onset {}; end {}; pitch {}",
+                        npc.getUUID(), playback.noteIndex(), note, playback.startTick(), playback.endTick(), CampfireMelody.pitch(note));
             }
         }
 

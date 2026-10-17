@@ -1,6 +1,8 @@
 package dev.livedin.client;
 
 import dev.livedin.entity.AmbientNpc;
+import dev.livedin.entity.activity.FishingCast;
+import dev.livedin.entity.activity.CampActivity;
 import dev.livedin.registry.ModContent;
 import dev.livedin.scene.CampfireMelody;
 import dev.livedin.entity.NpcRole;
@@ -15,9 +17,15 @@ public final class TravelerModel extends PlayerModel<AmbientNpc> {
 
     @Override
     public void setupAnim(AmbientNpc npc, float swing, float swingAmount, float age, float yaw, float pitch) {
+        rightArmPose = npc.getMainHandItem().is(Items.BOW)
+                ? (npc.isUsingItem() ? net.minecraft.client.model.HumanoidModel.ArmPose.BOW_AND_ARROW : net.minecraft.client.model.HumanoidModel.ArmPose.ITEM)
+                : (npc.getMainHandItem().isEmpty() ? net.minecraft.client.model.HumanoidModel.ArmPose.EMPTY
+                    : net.minecraft.client.model.HumanoidModel.ArmPose.ITEM);
+        leftArmPose = net.minecraft.client.model.HumanoidModel.ArmPose.EMPTY;
         super.setupAnim(npc, swing, swingAmount, age, yaw, pitch);
-        if (npc.getRole() == NpcRole.FISHER && npc.getMainHandItem().is(Items.FISHING_ROD)) {
-            float tick = npc.getFishingTick();
+        if ((npc.getRole() == NpcRole.FISHER || npc.getRole() == NpcRole.BOAT_RIDER)
+                && npc.getMainHandItem().is(Items.FISHING_ROD)) {
+            float tick = FishingCast.cycleTick(npc);
             if (tick >= 0) tick += age - npc.tickCount;
             rightArm.xRot = FishingCycle.armPitch(tick);
             rightArm.yRot = 0;
@@ -36,10 +44,10 @@ public final class TravelerModel extends PlayerModel<AmbientNpc> {
             rightArm.xRot = -0.85F;
             rightArm.yRot = -0.35F;
             rightArm.zRot = 0;
-            if (npc.isPerforming() && CampfireMelody.noteAt(npc.level().getGameTime()) >= 0) {
+            var playback = CampfireMelody.playbackAt(npc.level().getGameTime());
+            if (CampActivity.isPerforming(npc) && playback.midiNote() >= 0) {
                 float partialTick = age - npc.tickCount;
-                float phase = (npc.level().getGameTime() % CampfireMelody.TICKS_PER_NOTE + partialTick)
-                        * Mth.TWO_PI / CampfireMelody.TICKS_PER_NOTE;
+                float phase = playback.progress(partialTick) * Mth.TWO_PI;
                 rightArm.xRot += 0.06F * Mth.sin(phase);
                 rightArm.zRot += 0.04F * Mth.cos(phase);
             }

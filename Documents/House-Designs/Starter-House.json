@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "name": "Starter House",
+  "template": "livedin:houses/starter_house",
+  "source_world": "C:/Lived-in/run/saves/house_creation",
+  "source_dimension": "minecraft:overworld",
+  "source_sponge_corners": [
+    [
+      -4,
+      -61,
+      -3
+    ],
+    [
+      -4,
+      -61,
+      16
+    ],
+    [
+      16,
+      -61,
+      -3
+    ],
+    [
+      16,
+      -61,
+      16
+    ]
+  ],
+  "source_capture_min": [
+    -4,
+    -60,
+    -3
+  ],
+  "source_capture_max": [
+    15,
+    -55,
+    16
+  ],
+  "normalization": "Omit the empty eastern marker column X=16; every non-air block is retained.",
+  "size": [
+    20,
+    6,
+    20
+  ],
+  "front": "south",
+  "door_thresholds": [
+    [
+      11,
+      1,
+      14
+    ],
+    [
+      12,
+      1,
+      14
+    ]
+  ],
+  "outside_approach": [
+    [
+      11,
+      0,
+      15
+    ],
+    [
+      12,
+      0,
+      15
+    ]
+  ],
+  "bed_feet": [
+    [
+      13,
+      1,
+      7
+    ],
+    [
+      13,
+      1,
+      8
+    ]
+  ],
+  "bed_heads": [
+    [
+      14,
+      1,
+      7
+    ],
+    [
+      14,
+      1,
+      8
+    ]
+  ],
+  "foundation": "Requires level solid ground one block below template Y=0; ground and sponges are not captured.",
+  "wool_variants": {
+    "white": "livedin:houses/starter_house/white",
+    "orange": "livedin:houses/starter_house/orange",
+    "magenta": "livedin:houses/starter_house/magenta",
+    "light_blue": "livedin:houses/starter_house/light_blue",
+    "yellow": "livedin:houses/starter_house/yellow",
+    "lime": "livedin:houses/starter_house/lime",
+    "pink": "livedin:houses/starter_house/pink",
+    "gray": "livedin:houses/starter_house/gray",
+    "light_gray": "livedin:houses/starter_house/light_gray",
+    "cyan": "livedin:houses/starter_house/cyan",
+    "purple": "livedin:houses/starter_house/purple",
+    "blue": "livedin:houses/starter_house/blue",
+    "brown": "livedin:houses/starter_house/brown",
+    "green": "livedin:houses/starter_house/green",
+    "red": "livedin:houses/starter_house/red",
+    "black": "livedin:houses/starter_house/black"
+  },
+  "color_targets": [
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        9,
+        1,
+        6
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        10,
+        1,
+        6
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        10,
+        1,
+        7
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        6
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        7
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        8
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        9
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        10
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        11
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        11,
+        1,
+        12
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        12,
+        1,
+        10
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        12,
+        1,
+        11
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        12,
+        1,
+        12
+      ]
+    },
+    {
+      "source_block": "minecraft:white_bed",
+      "local": [
+        13,
+        1,
+        7
+      ]
+    },
+    {
+      "source_block": "minecraft:white_bed",
+      "local": [
+        13,
+        1,
+        8
+      ]
+    },
+    {
+      "source_block": "minecraft:white_carpet",
+      "local": [
+        13,
+        1,
+        10
+      ]
+    },
+    {
+      "source_block": "minecraft:white_bed",
+      "local": [
+        14,
+        1,
+        7
+      ]
+    },
+    {
+      "source_block": "minecraft:white_bed",
+      "local": [
+        14,
+        1,
+        8
+      ]
+    }
+  ],
+  "preserve_colors": [
+    "minecraft:black_carpet",
+    "minecraft:smooth_stone",
+    "minecraft:candle"
+  ],
+  "counts": {
+    "minecraft:acacia_door": 4,
+    "minecraft:black_carpet": 6,
+    "minecraft:candle": 2,
+    "minecraft:chest": 6,
+    "minecraft:cobbled_deepslate": 79,
+    "minecraft:oak_slab": 3,
+    "minecraft:smooth_stone": 54,
+    "minecraft:soul_wall_torch": 1,
+    "minecraft:stripped_birch_log": 53,
+    "minecraft:stripped_mangrove_log": 2,
+    "minecraft:tall_grass": 8,
+    "minecraft:wall_torch": 1,
+    "minecraft:white_bed": 4,
+    "minecraft:white_carpet": 14
+  },
+  "non_air_blocks": 237,
+  "empty_chests": 6,
+  "entities_exported": 0,
+  "base_sha256": "d0d41d583863bc2ca8ee4ccfd4613e6c1375f9f5d45e3553ad3c548775ca3bf1"
+}

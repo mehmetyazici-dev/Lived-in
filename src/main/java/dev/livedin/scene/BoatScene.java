@@ -1,6 +1,7 @@
 package dev.livedin.scene;
 
 import dev.livedin.entity.AmbientNpc;
+import dev.livedin.entity.activity.BoatActivity;
 import dev.livedin.registry.ModContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -10,11 +11,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
-/** A manually placed, straight route on exposed still water; never changes terrain. */
+/** Validates a safe initial water corridor and mounts a rider; never changes terrain. */
 public final class BoatScene {
     private BoatScene() {}
     public enum Result {
-        SUCCESS("Placed one boat rider on a short return route."),
+        SUCCESS("Placed one fishing boat rider; it will explore connected loaded water."),
         UNSAFE("Needs two source-water positions at the same height, 4 to 12 blocks apart along X or Z, with a clear 3-wide water corridor and two air blocks above it."),
         OCCUPIED("This route already contains a traveler or boat."),
         SPAWN_FAILED("Boat scene placement was cancelled; its new entities were removed.");
@@ -59,7 +60,10 @@ public final class BoatScene {
         boat.moveTo(start.getX() + 0.5, start.getY() + 0.8, start.getZ() + 0.5, yaw, 0);
         boat.setVariant(Boat.Type.OAK);
         rider.moveTo(boat.getX(), boat.getY() + 0.5, boat.getZ(), yaw, 0);
-        rider.assignBoatScene(start, end, boat.getUUID());
+        rider.setActivity(new BoatActivity(start, end, boat.getUUID()), start.above());
+        rider.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND,
+                new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.FISHING_ROD));
+        rider.setDropChance(net.minecraft.world.entity.EquipmentSlot.MAINHAND, 0);
         if (!level.addFreshEntity(boat) || !level.addFreshEntity(rider) || !rider.startRiding(boat)) {
             rider.discard(); boat.discard(); return Result.SPAWN_FAILED;
         }

@@ -15,6 +15,9 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 @EventBusSubscriber(modid = LivedIn.MOD_ID, value = Dist.CLIENT)
 public final class ClientEvents {
     private ClientEvents() {}
+    @SubscribeEvent public static void screens(net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+        event.register(ModContent.CONVERSATION.get(), ConversationScreen::new);
+    }
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

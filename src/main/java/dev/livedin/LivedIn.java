@@ -18,8 +18,10 @@ public final class LivedIn {
 
     public LivedIn(IEventBus modBus) {
         ModContent.register(modBus);
+        dev.livedin.world.NaturalEncounters.register(modBus);
         modBus.addListener(LivedIn::registerAttributes);
         modBus.addListener(LivedIn::addCreativeItems);
+        modBus.addListener(dev.livedin.social.SocialEvents::register);
         LOGGER.info("Lived-In loaded: ambient travelers are ready.");
     }
 

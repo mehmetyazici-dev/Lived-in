@@ -16,6 +16,11 @@ public final class ModContent {
     private static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(Registries.ENTITY_TYPE, LivedIn.MOD_ID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(LivedIn.MOD_ID);
+    private static final DeferredRegister<net.minecraft.world.inventory.MenuType<?>> MENUS =
+            DeferredRegister.create(Registries.MENU, LivedIn.MOD_ID);
+    public static final DeferredHolder<net.minecraft.world.inventory.MenuType<?>, net.minecraft.world.inventory.MenuType<dev.livedin.social.ConversationMenu>> CONVERSATION =
+            MENUS.register("conversation", () -> net.neoforged.neoforge.common.extensions.IMenuTypeExtension.create(dev.livedin.social.ConversationMenu::new));
+    public static final DeferredHolder<Item, Item> INVITATION = ITEMS.register("invitation", () -> new Item(new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<AmbientNpc>> AMBIENT_NPC =
             ENTITIES.register("ambient_npc", () -> EntityType.Builder.of(AmbientNpc::new, MobCategory.CREATURE)
@@ -41,5 +46,6 @@ public final class ModContent {
         ENTITIES.register(modBus);
         ITEMS.register(modBus);
         SOUNDS.register(modBus);
+        MENUS.register(modBus);
     }
 }

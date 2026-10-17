@@ -29,7 +29,8 @@ public final class TravelerItemLayer extends ItemInHandLayer<AmbientNpc, Travele
     @Override
     protected void renderArmWithItem(LivingEntity entity, ItemStack stack, ItemDisplayContext context,
                                     HumanoidArm arm, PoseStack poses, MultiBufferSource buffer, int light) {
-        if (arm == HumanoidArm.RIGHT && entity instanceof AmbientNpc npc && npc.getRole() == NpcRole.FISHER
+        if (arm == HumanoidArm.RIGHT && entity instanceof AmbientNpc npc
+                && (npc.getRole() == NpcRole.FISHER || npc.getRole() == NpcRole.BOAT_RIDER)
                 && stack.is(Items.FISHING_ROD)) {
             poses.pushPose();
             getParentModel().translateToHand(arm, poses);

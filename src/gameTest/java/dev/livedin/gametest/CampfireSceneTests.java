@@ -2,6 +2,7 @@ package dev.livedin.gametest;
 
 import dev.livedin.LivedIn;
 import dev.livedin.entity.AmbientNpc;
+import dev.livedin.entity.activity.CampActivity;
 import dev.livedin.entity.NpcRole;
 import dev.livedin.registry.ModContent;
 import dev.livedin.scene.CampfireScene;
@@ -57,7 +58,7 @@ public final class CampfireSceneTests {
                 "Repeated placement must be rejected");
         helper.assertTrue(members(helper).size() == 3, "Repeated placement must not duplicate NPCs");
         helper.runAfterDelay(3, () -> {
-            helper.assertTrue(musician(helper).isPerforming(), "Musician must perform near a lit fire");
+            helper.assertTrue(CampActivity.isPerforming(musician(helper)), "Musician must perform near a lit fire");
             helper.succeed();
         });
     }
@@ -93,9 +94,9 @@ public final class CampfireSceneTests {
         for (int tick = 2; tick < 600; tick++) {
             helper.runAtTickTime(tick, () -> {
                 for (AmbientNpc npc : group) {
-                    helper.assertTrue(npc.isSafeCampPosition(npc.blockPosition()), "Camp member entered fire clearance");
+                    helper.assertTrue(npc.getActivity().isSafePosition(npc, npc.blockPosition()), "Camp member entered fire clearance");
                     helper.assertTrue(npc.isWithinActivityArea(npc.blockPosition()), "Camp member wandered from assigned spot");
-                    helper.assertTrue(npc.getHealth() == 20 && !npc.isOnFire(), "Camp member must not take fire damage");
+                    helper.assertTrue(npc.getHealth() == npc.getMaxHealth() && !npc.isOnFire(), "Camp member must not take fire damage");
                 }
             });
         }
@@ -110,24 +111,24 @@ public final class CampfireSceneTests {
         BlockPos center = place(helper);
         AmbientNpc musician = musician(helper);
         helper.runAtTickTime(4, () -> {
-            helper.assertTrue(musician.isPerforming(), "Lit fire and lute should start performance");
+            helper.assertTrue(CampActivity.isPerforming(musician), "Lit fire and lute should start performance");
             helper.getLevel().setBlockAndUpdate(center, Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false));
         });
         helper.runAtTickTime(8, () -> {
-            helper.assertTrue(!musician.isPerforming(), "Extinguishing fire must stop performance");
+            helper.assertTrue(!CampActivity.isPerforming(musician), "Extinguishing fire must stop performance");
             helper.getLevel().setBlockAndUpdate(center, Blocks.CAMPFIRE.defaultBlockState());
         });
         helper.runAtTickTime(12, () -> {
-            helper.assertTrue(musician.isPerforming(), "Relighting fire should resume performance");
+            helper.assertTrue(CampActivity.isPerforming(musician), "Relighting fire should resume performance");
             musician.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
         });
         helper.runAtTickTime(16, () -> {
-            helper.assertTrue(!musician.isPerforming(), "Removing lute must stop performance");
+            helper.assertTrue(!CampActivity.isPerforming(musician), "Removing lute must stop performance");
             musician.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModContent.LUTE.get()));
             helper.getLevel().setBlockAndUpdate(center, Blocks.AIR.defaultBlockState());
         });
         helper.runAtTickTime(20, () -> {
-            helper.assertTrue(!musician.isPerforming(), "Removing campfire must stop performance");
+            helper.assertTrue(!CampActivity.isPerforming(musician), "Removing campfire must stop performance");
             helper.succeed();
         });
     }
@@ -147,8 +148,8 @@ public final class CampfireSceneTests {
         }
         for (CompoundTag tag : savedMembers) {
             var npc = (AmbientNpc) EntityType.loadEntityRecursive(tag, helper.getLevel(), entity -> entity);
-            helper.assertTrue(npc != null && center.equals(npc.getCampfireSpot()), "Camp association must survive reload");
-            helper.assertTrue(!npc.isPerforming(), "Performance is recomputed rather than saved active");
+            helper.assertTrue(npc != null && center.equals(((CampActivity) npc.getActivity()).fire()), "Camp association must survive reload");
+            helper.assertTrue(!CampActivity.isPerforming(npc), "Performance is recomputed rather than saved active");
             helper.getLevel().addFreshEntity(npc);
         }
         helper.runAfterDelay(3, () -> {
@@ -157,7 +158,7 @@ public final class CampfireSceneTests {
             var restoredIds = new HashSet<java.util.UUID>();
             reloaded.forEach(npc -> restoredIds.add(npc.getUUID()));
             helper.assertTrue(restoredIds.equals(identities), "Reload must preserve all member identities");
-            helper.assertTrue(musician(helper).isPerforming() && musician(helper).getOffhandItem().is(ModContent.LUTE.get()),
+            helper.assertTrue(CampActivity.isPerforming(musician(helper)) && musician(helper).getOffhandItem().is(ModContent.LUTE.get()),
                     "Reload must restore musician, instrument, and active behavior");
             helper.succeed();
         });
